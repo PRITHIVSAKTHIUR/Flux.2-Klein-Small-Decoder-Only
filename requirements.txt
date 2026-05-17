@@ -1,0 +1,15 @@
+git+https://github.com/huggingface/diffusers.git
+transformers==4.57.6
+huggingface_hub
+sentencepiece
+bitsandbytes
+torchvision
+accelerate
+torchao
+spaces
+hf_xet
+gradio
+numpy
+torch==2.11.0
+peft
+av
