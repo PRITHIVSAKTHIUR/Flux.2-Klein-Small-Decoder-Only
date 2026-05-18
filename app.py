@@ -104,7 +104,7 @@ def save_image(img: Image.Image, prefix: str = "output") -> str:
     return filename
 
 # --- Inference Function ---
-@spaces.GPU(duration=120)
+@spaces.GPU(size="xlarge")
 def infer(
     prompt: str,
     image_paths: List[str] = None,
