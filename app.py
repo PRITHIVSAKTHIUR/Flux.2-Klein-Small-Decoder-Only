@@ -133,7 +133,7 @@ def generate_image(
 # --- Gradio UI ---
 with gr.Blocks(title="Flux.2 Klein - Small Decoder") as demo:
     gr.Markdown("# **Flux.2 Klein — Small Decoder VAE**")
-    gr.Markdown("Upload images (optional) and enter a prompt to generate or edit with the 4B distilled model.")
+    gr.Markdown("Upload images (optional) and enter a prompt to generate or edit with the 4B distilled model. [GitHub ↗](https://github.com/PRITHIVSAKTHIUR/Flux.2-Klein-Small-Decoder-Only)")
 
     with gr.Row():
         with gr.Column(scale=1):
