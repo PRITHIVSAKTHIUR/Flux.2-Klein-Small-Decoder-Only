@@ -2,7 +2,7 @@
 
 Flux.2 Klein — Small Decoder VAE is an experimental, high-performance image generation and editing application designed to leverage the powerful `black-forest-labs/FLUX.2-klein-4B` distilled model paired strictly with the `FLUX.2-small-decoder`. This application is engineered to test the efficiency and output characteristics of the small decoder architecture via a robust, Citrus-themed Gradio web interface. Operating entirely on CUDA-enabled GPUs with model CPU offloading, the suite provides a seamless workflow for pure text-to-image synthesis, as well as complex image-to-image editing, relighting, and texture enhancement across batch image uploads.
 
-> hf.co/spaces — [prithivmlmods/flux.2-klein-small-decoder](https://huggingface.co/spaces/prithivMLmods/Flux.2-Klein-Small-Decoder)
+> 🤗 hf.co/spaces — [prithivmlmods/flux.2-klein-small-decoder](https://huggingface.co/spaces/prithivMLmods/Flux.2-Klein-Small-Decoder)
 
 
 | example 1 | example 2 |
