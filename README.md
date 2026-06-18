@@ -1,6 +1,8 @@
-# **Flux.2 Klein — Small Decoder VAE**
+# **[Flux.2 Klein — Small Decoder VAE](https://huggingface.co/spaces/prithivMLmods/Flux.2-Klein-Small-Decoder)**
 
 Flux.2 Klein — Small Decoder VAE is an advanced, experimental image generation and editing application built entirely on the `black-forest-labs/FLUX.2-klein-4B` base model, specifically paired with the newly introduced `FLUX.2-small-decoder` Variational Autoencoder. Designed to optimize visual inference and test alternative latent decoding, this suite provides a user-friendly Gradio interface for both Text-to-Image synthesis and structural Image-to-Image transformations. Featuring CPU offloading, automatic aspect ratio preservation, and dynamic dimension snapping, this application serves as an ideal workspace for iterating on highly detailed, small-decoder-driven diffusion imagery.
+
+> hf.co/spaces — [prithivmlmods/flux.2-klein-small-decoder](https://huggingface.co/spaces/prithivMLmods/Flux.2-Klein-Small-Decoder)
 
 | example 1 | example 2 |
 |-----------|-----------|
