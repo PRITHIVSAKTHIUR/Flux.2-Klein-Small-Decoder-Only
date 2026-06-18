@@ -1,8 +1,9 @@
 # **[Flux.2 Klein — Small Decoder VAE](https://huggingface.co/spaces/prithivMLmods/Flux.2-Klein-Small-Decoder)**
 
-Flux.2 Klein — Small Decoder VAE is an advanced, experimental image generation and editing application built entirely on the `black-forest-labs/FLUX.2-klein-4B` base model, specifically paired with the newly introduced `FLUX.2-small-decoder` Variational Autoencoder. Designed to optimize visual inference and test alternative latent decoding, this suite provides a user-friendly Gradio interface for both Text-to-Image synthesis and structural Image-to-Image transformations. Featuring CPU offloading, automatic aspect ratio preservation, and dynamic dimension snapping, this application serves as an ideal workspace for iterating on highly detailed, small-decoder-driven diffusion imagery.
+Flux.2 Klein — Small Decoder VAE is an experimental, high-performance image generation and editing application designed to leverage the powerful `black-forest-labs/FLUX.2-klein-4B` distilled model paired strictly with the `FLUX.2-small-decoder`. This application is engineered to test the efficiency and output characteristics of the small decoder architecture via a robust, Citrus-themed Gradio web interface. Operating entirely on CUDA-enabled GPUs with model CPU offloading, the suite provides a seamless workflow for pure text-to-image synthesis, as well as complex image-to-image editing, relighting, and texture enhancement across batch image uploads.
 
 > hf.co/spaces — [prithivmlmods/flux.2-klein-small-decoder](https://huggingface.co/spaces/prithivMLmods/Flux.2-Klein-Small-Decoder)
+
 
 | example 1 | example 2 |
 |-----------|-----------|
@@ -10,11 +11,10 @@ Flux.2 Klein — Small Decoder VAE is an advanced, experimental image generation
 
 ### **Key Features**
 
-* **Small Decoder Integration:** Directly integrates the `black-forest-labs/FLUX.2-small-decoder`, allowing users to test and generate imagery specifically tuned through this highly efficient autoencoder variant.
-* **Dual-Mode Inference:** Supports pure Text-to-Image generation alongside multi-image Image-to-Image editing (e.g., style transfer, weather alteration, relighting) using Gradio's Gallery inputs.
-* **Dynamic Dimension Scaling:** Automatically calculates and adapts generation resolutions based on uploaded reference images, preserving original aspect ratios while securely snapping dimensions to multiples of 8 (up to $1024 \times 1024$).
-* **Advanced Generation Controls:** Includes a collapsible settings panel to manually override and fine-tune Width, Height, Inference Steps, Guidance Scale, and Seed configurations.
-* **GPU Memory Optimization:** Implements `enable_model_cpu_offload()` and aggressive garbage collection to ensure the 4B parameter model runs efficiently on consumer-grade hardware.
+* **Small Decoder Integration:** Explicitly loads and utilizes the lightweight `black-forest-labs/FLUX.2-small-decoder` Variational Autoencoder alongside the 4B base model, optimizing the decoding pipeline for specific performance testing.
+* **Flexible Input Methods:** Supports standard text-to-image generation alongside multi-image Gallery uploads. It intelligently calculates and snaps target resolutions based on the uploaded reference media's aspect ratio.
+* **Granular Inference Controls:** Provides a collapsible 'Advanced Settings' panel to manually configure the Generation Seed, Inference Steps, Base Dimensions, and Guidance Scale.
+* **Dynamic Resolution Scaling:** Automatically resizes and scales uploaded reference images, maintaining correct proportions while ensuring the dimensions snap to multiples of 8 (bounded by a maximum dimension of 1024x1024) to prevent tensor shape mismatches.
 
 ### **Repository Structure**
 
@@ -38,15 +38,15 @@ Flux.2 Klein — Small Decoder VAE is an advanced, experimental image generation
 
 ### **Installation and Requirements**
 
-To configure this application locally, set up a Python environment with the following dependencies. A dedicated CUDA-capable GPU is required to load and execute the models.
+To run Flux.2 Klein — Small Decoder VAE locally, you must configure a Python environment equipped to handle advanced compilation and heavy model weights. A modern CUDA-enabled GPU is required.
 
-**⚠️ Critical System Requirement:** This application requires **PyTorch 2.11.0 and CUDA 13.0**. The dependencies explicitly pull from the matching wheel index: `https://download.pytorch.org/whl/cu130`.
+This repository specifically relies on **PyTorch 2.11.0 and CUDA 13.0** (`--extra-index-url https://download.pytorch.org/whl/cu130`).
 
 #### **Running with `uv` (Recommended)**
 
-`uv` is an ultra-fast Python package and project manager written in Rust, which guarantees rapid virtual environment synchronization and reproducible execution.
+`uv` is an ultra-fast Python package and project manager written in Rust, ensuring rapid virtual environment synchronization and reproducible execution.
 
-**Step 1 — Install `uv`**
+**Step 1 — Install `uv**`
 
 * **macOS / Linux:** `curl -LsSf https://astral.sh/uv/install.sh | sh`
 * **Windows:** `powershell -c "irm https://astral.sh/uv/install.ps1 | iex"`
@@ -60,7 +60,7 @@ cd Flux.2-Klein-Small-Decoder-Only
 ```
 
 **Step 3 — Initialize the project and install dependencies**
-This will read the requirements and fetch the required PyTorch 2.11.0 + cu130 wheels automatically.
+This will automatically parse the `uv.lock` and `requirements.txt` to fetch the correct PyTorch 2.11.0 + cu130 wheels.
 
 ```bash
 uv sync
@@ -80,7 +80,7 @@ uv run app.py
 Ensure your local system package manager is upgraded:
 
 ```bash
-pip install pip>=26.1
+pip install pip>=26.1.2
 
 ```
 
@@ -91,9 +91,6 @@ Install the primary deep learning stack, diffusion utilities, and ecosystem stru
 --extra-index-url https://download.pytorch.org/whl/cu130
 
 git+https://github.com/huggingface/transformers.git@v4.57.6
-git+https://github.com/huggingface/accelerate.git
-git+https://github.com/huggingface/diffusers.git
-git+https://github.com/huggingface/peft.git
 huggingface-hub
 gradio==6.16.0
 torch==2.11.0
@@ -101,8 +98,10 @@ opencv-python
 sentencepiece
 torchvision
 torchaudio
+accelerate
 omegaconf
 termcolor
+diffusers
 kernels
 imageio
 hf_xet
@@ -110,6 +109,7 @@ spaces
 pyyaml
 pillow
 numpy
+peft
 ftfy
 av
 
@@ -117,12 +117,16 @@ av
 
 ### **Usage**
 
-Once the Gradio application initializes, load the dashboard by pointing your browser to the local loopback endpoint (typically `http://127.0.0.1:7860/`).
+After setting up your environment and ensuring your dependencies are installed, you can launch the application by running the main Python script:
 
-1. **Upload Reference (Optional):** Drop one or more images into the Input Images gallery to trigger Image-to-Image mode. The app will automatically adapt the generation dimensions to match the first image's aspect ratio.
-2. **Write Instruction:** Type a descriptive instruction or prompt in the text box (e.g., *"Change the weather to stormy"* or *"A futuristic cyberpunk cityscape at night"*).
-3. **Advanced Settings:** Expand the Advanced Settings accordion to tweak Inference Steps (default is 4 for distilled execution), Guidance Scale, or manually override the target width and height.
-4. **Generate:** Click **Generate Image**. The backend will process the generation and display the resulting output alongside the specific execution seed used.
+```bash
+python app.py
+
+```
+
+The script will initialize the FLUX.2 pipeline and the small decoder VAE, loading them into memory with CPU offloading enabled to optimize VRAM. Once ready, it will expose a local web server (typically at `http://127.0.0.1:7860/`).
+
+Open this address in your browser to access the interface. You can upload reference images into the gallery or leave it empty, input your generation prompt (e.g., *"Change the weather to stormy"*), adjust advanced settings if necessary, and click "Generate Image" to create and view your results.
 
 ### **License and Source**
 
