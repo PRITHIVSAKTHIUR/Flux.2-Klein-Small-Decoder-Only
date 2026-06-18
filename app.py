@@ -33,7 +33,7 @@ pipe = Flux2KleinPipeline.from_pretrained(
     vae=vae_small,
     torch_dtype=dtype,
 ).to(device)
-pipe.enable_model_cpu_offload()
+print("Pipeline loaded directly to CUDA.")
 
 # --- Utility Functions ---
 def calc_dimensions(pil_img: Image.Image) -> Tuple[int, int]:
