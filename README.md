@@ -4,10 +4,7 @@ Flux.2 Klein — Small Decoder VAE is an experimental, high-performance image ge
 
 > 🤗 hf.co/spaces — [prithivmlmods/flux.2-klein-small-decoder](https://huggingface.co/spaces/prithivMLmods/Flux.2-Klein-Small-Decoder)
 
-
-| example 1 | example 2 |
-|-----------|-----------|
-| <img src="https://github.com/user-attachments/assets/e77919a0-6568-4d39-a230-6c8cac9216e0" width="100%"> | <img src="https://github.com/user-attachments/assets/08a1bec7-bbbd-4fa2-b718-5593bbc88628" width="100%"> |
+<img width="1746" height="1593" alt="screencapture-huggingface-co-spaces-prithivMLmods-Flux-2-Klein-Small-Decoder-2026-07-07-10_32_56" src="https://github.com/user-attachments/assets/1879cb2c-5dac-419b-b4f3-2d0b4b7e5d14" />
 
 ### **Key Features**
 
