@@ -4,6 +4,8 @@ Flux.2-Klein-Edit-Ultra-Fast (Flux.2-Klein-Small-Decoder-Only) is a high-perform
 
 The application uses a FastAPI backend server (`gradio.Server`) paired with a dark-mode frontend single-page application (SPA). Features include an A/B image comparison slider, a result history filmstrip, quick prompt chips, and a dual-view canvas.
 
+<img width="1919" height="850" alt="image (1)" src="https://github.com/user-attachments/assets/04829d9f-5f46-4446-b2fd-cec7de603231" />
+
 ### **Key Features**
 
 * **Optimized Small Decoder VAE:** Uses the `FLUX.2-small-decoder` VAE alongside `FLUX.2-klein-4B` to accelerate decoding cycles while preserving visual details and prompt adherence.
