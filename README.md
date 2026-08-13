@@ -1,17 +1,16 @@
-# **[Flux.2 Klein — Small Decoder VAE](https://huggingface.co/spaces/prithivMLmods/Flux.2-Klein-Small-Decoder)**
+# **[Flux.2-Klein-Edit-Ultra-Fast](https://huggingface.co/spaces/prithivMLmods/Flux.2-Klein-Edit-Ultra-Fast)**
 
-Flux.2 Klein — Small Decoder VAE is an experimental, high-performance image generation and editing application designed to leverage the powerful `black-forest-labs/FLUX.2-klein-4B` distilled model paired strictly with the `FLUX.2-small-decoder`. This application is engineered to test the efficiency and output characteristics of the small decoder architecture via a robust, Citrus-themed Gradio web interface. Operating entirely on CUDA-enabled GPUs with model CPU offloading, the suite provides a seamless workflow for pure text-to-image synthesis, as well as complex image-to-image editing, relighting, and texture enhancement across batch image uploads.
+Flux.2-Klein-Edit-Ultra-Fast (Flux.2-Klein-Small-Decoder-Only) is a high-performance image editing and generation platform powered by the `black-forest-labs/FLUX.2-klein-4B` model paired with the `black-forest-labs/FLUX.2-small-decoder` VAE. The suite enables fast 4-step image-to-image editing, multi-image reference manipulation, and text-to-image generation directly on CUDA hardware.
 
-> 🤗 hf.co/spaces — [prithivmlmods/flux.2-klein-small-decoder](https://huggingface.co/spaces/prithivMLmods/Flux.2-Klein-Small-Decoder)
-
-<img width="1746" height="1593" alt="screencapture-huggingface-co-spaces-prithivMLmods-Flux-2-Klein-Small-Decoder-2026-07-07-10_32_56" src="https://github.com/user-attachments/assets/1879cb2c-5dac-419b-b4f3-2d0b4b7e5d14" />
+The application uses a FastAPI backend server (`gradio.Server`) paired with a dark-mode frontend single-page application (SPA). Features include an A/B image comparison slider, a result history filmstrip, quick prompt chips, and a dual-view canvas.
 
 ### **Key Features**
 
-* **Small Decoder Integration:** Explicitly loads and utilizes the lightweight `black-forest-labs/FLUX.2-small-decoder` Variational Autoencoder alongside the 4B base model, optimizing the decoding pipeline for specific performance testing.
-* **Flexible Input Methods:** Supports standard text-to-image generation alongside multi-image Gallery uploads. It intelligently calculates and snaps target resolutions based on the uploaded reference media's aspect ratio.
-* **Granular Inference Controls:** Provides a collapsible 'Advanced Settings' panel to manually configure the Generation Seed, Inference Steps, Base Dimensions, and Guidance Scale.
-* **Dynamic Resolution Scaling:** Automatically resizes and scales uploaded reference images, maintaining correct proportions while ensuring the dimensions snap to multiples of 8 (bounded by a maximum dimension of 1024x1024) to prevent tensor shape mismatches.
+* **Optimized Small Decoder VAE:** Uses the `FLUX.2-small-decoder` VAE alongside `FLUX.2-klein-4B` to accelerate decoding cycles while preserving visual details and prompt adherence.
+* **Dual-Mode Generation (I2I & T2I):** Performs image editing when input images are supplied, or falls back seamlessly to text-to-image generation if the input gallery is empty.
+* **Multi-Image Reference Editing:** Accepts multiple reference inputs to guide transformations—such as transferring accessories or outfits from reference photos onto target subjects.
+* **Studio SPA Interface:** An interactive single-page web app built with vanilla web components, offering an A/B image comparison slider, history filmstrip, prompt chips, and drag-and-drop file uploaders.
+* **Automatic Aspect-Ratio Snapping:** Calculates dimensions from the first input image, scaling parameters to fit within 1024px while snapping width and height to multiples of 8.
 
 ### **Repository Structure**
 
@@ -24,24 +23,26 @@ Flux.2 Klein — Small Decoder VAE is an experimental, high-performance image ge
 │   ├── I1.jpg
 │   └── I2.jpg
 ├── app.py
+├── index.html
 ├── LICENSE.txt
 ├── pre-requirements.txt
 ├── pyproject.toml
 ├── README.md
 ├── requirements.txt
 └── uv.lock
-
 ```
 
 ### **Installation and Requirements**
 
-To run Flux.2 Klein — Small Decoder VAE locally, you must configure a Python environment equipped to handle advanced compilation and heavy model weights. A modern CUDA-enabled GPU is required.
+To set up the Flux.2-Klein-Edit-Ultra-Fast environment locally, configure your system according to the specifications below. A modern CUDA-enabled GPU is required.
 
-This repository specifically relies on **PyTorch 2.11.0 and CUDA 13.0** (`--extra-index-url https://download.pytorch.org/whl/cu130`).
+* **Python Version:** Minimum Python **3.10.13** or above is required; Python **3.12** or **3.14** is recommended.
+* **PyTorch Version:** `torch==2.11.0` or above is required for best compatibility.
+* **CUDA Version:** CUDA **13.0** is recommended (`--extra-index-url https://download.pytorch.org/whl/cu130`), matching the environment used on the live Hugging Face demo.
 
 #### **Running with `uv` (Recommended)**
 
-`uv` is an ultra-fast Python package and project manager written in Rust, ensuring rapid virtual environment synchronization and reproducible execution.
+`uv` is an ultra-fast Python package and project manager written in Rust. It ensures rapid virtual environment setup and exact dependency synchronization based on the `uv.lock` file.
 
 **Step 1 — Install `uv`**
 
@@ -53,79 +54,62 @@ This repository specifically relies on **PyTorch 2.11.0 and CUDA 13.0** (`--extr
 ```bash
 git clone https://github.com/PRITHIVSAKTHIUR/Flux.2-Klein-Small-Decoder-Only.git
 cd Flux.2-Klein-Small-Decoder-Only
-
 ```
 
 **Step 3 — Initialize the project and install dependencies**
-This will automatically parse the `uv.lock` and `requirements.txt` to fetch the correct PyTorch 2.11.0 + cu130 wheels.
 
 ```bash
 uv sync
-
 ```
 
 **Step 4 — Run the script**
 
 ```bash
 uv run app.py
-
 ```
 
-#### **Standard PIP Installation**
+#### **Standard PIP Implementation**
 
-**1. Install Pre-requirements**
-Ensure your local system package manager is upgraded:
+**1. Update Package Manager**
+Upgrade your local package manager:
 
 ```bash
 pip install pip>=26.1.2
-
 ```
 
 **2. Install Core Dependencies**
-Install the primary deep learning stack, diffusion utilities, and ecosystem structures. Place these in a `requirements.txt` file and execute `pip install -r requirements.txt`.
+Install the primary deep learning stack, transformer libraries, and core computing utilities listed in `requirements.txt`:
+
+```bash
+pip install -r requirements.txt
+```
+
+#### **Core Requirements List (`requirements.txt`)**
 
 ```text
 --extra-index-url https://download.pytorch.org/whl/cu130
-
-git+https://github.com/huggingface/transformers.git@v4.57.6
-huggingface-hub
-gradio==6.16.0
 torch==2.11.0
-opencv-python
-sentencepiece
-torchvision
-torchaudio
-accelerate
-omegaconf
-termcolor
-diffusers
-kernels
-imageio
-hf_xet
-spaces
-pyyaml
-pillow
-numpy
-peft
-ftfy
-av
-
+torchvision==0.26.0
+transformers==5.14.1
+accelerate==1.14.0
+diffusers==0.39.0
+peft==0.19.1
+gradio==6.22.0
+av==17.1.0
+spaces==0.51.1
+huggingface-hub==1.24.0
 ```
 
 ### **Usage**
 
-After setting up your environment and ensuring your dependencies are installed, you can launch the application by running the main Python script:
+Once the web server initializes, open your browser to the local address output in your terminal (typically `http://127.0.0.1:7860/`).
 
-```bash
-python app.py
-
-```
-
-The script will initialize the FLUX.2 pipeline and the small decoder VAE, loading them into memory with CPU offloading enabled to optimize VRAM. Once ready, it will expose a local web server (typically at `http://127.0.0.1:7860/`).
-
-Open this address in your browser to access the interface. You can upload reference images into the gallery or leave it empty, input your generation prompt (e.g., *"Change the weather to stormy"*), adjust advanced settings if necessary, and click "Generate Image" to create and view your results.
+1. **Upload Asset (Optional):** Drag and drop images into the main canvas workspace, paste an image from your clipboard, or click the upload icon in the left rail. Leave empty for text-to-image generation.
+2. **Refine Instructions:** Type your instructions inside the prompt field, or click one of the **Quick Prompts** chips to fill it. Press ⌘/Ctrl + Enter or click **Edit Image**.
+3. **Compare & Chain:** Use the **Compare** tool on the left rail to view an A/B slider of the before and after states. Click **Use as Input** to chain multiple edits sequentially.
 
 ### **License and Source**
 
 * **License:** [Apache License 2.0](https://github.com/PRITHIVSAKTHIUR/Flux.2-Klein-Small-Decoder-Only/blob/main/LICENSE.txt)
 * **GitHub Repository:** [https://github.com/PRITHIVSAKTHIUR/Flux.2-Klein-Small-Decoder-Only.git](https://github.com/PRITHIVSAKTHIUR/Flux.2-Klein-Small-Decoder-Only.git)
+* **Hugging Face Live Space:** [https://huggingface.co/spaces/prithivMLmods/Flux.2-Klein-Edit-Ultra-Fast](https://huggingface.co/spaces/prithivMLmods/Flux.2-Klein-Edit-Ultra-Fast)
